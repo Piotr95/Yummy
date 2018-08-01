@@ -1,43 +1,53 @@
 package core.controllers;
 
-import core.models.entities.Ingredient;
+import core.models.DTOs.ingredient.IngredientCreationDto;
+import core.models.DTOs.ingredient.IngredientDetailsDto;
+import core.models.DTOs.ingredient.IngredientListDto;
+import core.models.DTOs.ingredient.IngredientUpdateDto;
+import core.models.converters.IngredientDtoConverter;
 import core.services.IngredientsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/ingredients")
 public class IngredientsController {
     private IngredientsService ingredientsService;
+    private IngredientDtoConverter ingredientDtoConverter;
 
     @Autowired
-    public IngredientsController(IngredientsService ingredientsService) {
+    public IngredientsController(IngredientsService ingredientsService, IngredientDtoConverter ingredientDtoConverter) {
         this.ingredientsService = ingredientsService;
+        this.ingredientDtoConverter = ingredientDtoConverter;
     }
 
     @GetMapping
-    public Iterable<Ingredient> getAllIngrdiants() {
-        return ingredientsService.getAllIngredients();
+    public List<IngredientListDto> getAllIngrdiants() {
+        return ingredientsService.getAllIngredients().stream()
+                .map(ingredientDtoConverter::toList).collect(Collectors.toList());
+
     }
 
     @GetMapping("/{id}")
-    public Ingredient getById(@PathVariable("id") Long id) {
-        return ingredientsService.findById(id);
+    public IngredientDetailsDto getById(@PathVariable("id") Long id) {
+
+            return ingredientDtoConverter.toDetails(ingredientsService.get(id));
     }
 
     @PostMapping
-    public Ingredient create(@Valid @RequestBody Ingredient ingredient) {
-        return ingredientsService.create(ingredient);
+    public IngredientDetailsDto create(@RequestBody IngredientCreationDto ingredient) {
+        return ingredientDtoConverter.toDetails(ingredientsService.create(ingredientDtoConverter.fromCreation(ingredient)));
     }
 
     @PutMapping
-    public Ingredient update(@Valid @RequestBody Ingredient ingredient) {
-        return ingredientsService.update(ingredient);
+    public IngredientDetailsDto update(@RequestBody IngredientUpdateDto ingredient) {
+        return ingredientDtoConverter.toDetails(ingredientsService.update(ingredientDtoConverter.fromUpdate(ingredient)));
     }
 
 

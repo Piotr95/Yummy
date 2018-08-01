@@ -11,6 +11,4 @@ public class IngredientCreationDto {
     @Size(message = "Name should be between 2 and 100 characters long.", min = 2, max = 100)
     private String ingredientName;
 
-    @NotNull
-    private boolean isAnimalProduct;
 }

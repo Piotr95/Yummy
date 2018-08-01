@@ -1,5 +1,6 @@
 package core.services;
 
+import com.google.common.collect.Lists;
 import core.exeptions.ResourceNotFoundException;
 import core.models.entities.Ingredient;
 import core.repositories.IngredientsRepository;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,11 +21,11 @@ public class IngredientsService {
         this.ingredientsRepository = ingredientsRepository;
     }
 
-    public Iterable<Ingredient> getAllIngredients() {
-        return ingredientsRepository.findAll();
+    public List<Ingredient> getAllIngredients() {
+   return Lists.newArrayList(ingredientsRepository.findAll());
     }
 
-    public Ingredient findById(Long id) {
+    public Ingredient get(Long id) {
         return ingredientsRepository.findById(id).get();
 
 

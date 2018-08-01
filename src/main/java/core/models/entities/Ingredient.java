@@ -17,9 +17,9 @@ public class Ingredient {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    private String name;
+    private String ingredientName;
 
     public Ingredient(String newingridiant) {
-        name=newingridiant;
+        ingredientName=newingridiant;
     }
 }

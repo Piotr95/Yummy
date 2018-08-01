@@ -8,5 +8,4 @@ public class IngredientDetailsDto {
 
     private String ingredientName;
 
-    private boolean isAnimalProduct;
 }
