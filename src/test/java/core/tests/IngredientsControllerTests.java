@@ -1,6 +1,6 @@
 package core.tests;
 
-import core.models.Ingredient;
+import core.models.entities.Ingredient;
 import core.services.IngredientsService;
 import org.junit.Before;
 import org.junit.Test;

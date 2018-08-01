@@ -1,6 +1,7 @@
 package core;
-import core.models.Ingredient;
-import core.repositories.IngredientRepository;
+import core.models.entities.Ingredient;
+import core.repositories.IngredientsRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,14 +16,18 @@ public class YummyBackApplication {
     }
 
     @Bean
-    CommandLineRunner init(IngredientRepository ingredientRepository) {
+    CommandLineRunner init(IngredientsRepository ingredientsRepository) {
         return (ingridiants) -> Arrays.asList(
                 "cucumber,Garlic".split(","))
                 .forEach(
                         newingridiant -> {
-                            Ingredient ingredient = new Ingredient();
-                            ingredient.setName(newingridiant);
-                            ingredientRepository.save(ingredient);
+                            Ingredient ingredient = new Ingredient(newingridiant);
+                            ingredientsRepository.save(ingredient);
                         });
     }
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
+
 }

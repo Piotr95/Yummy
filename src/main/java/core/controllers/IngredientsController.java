@@ -1,22 +1,51 @@
 package core.controllers;
 
-import core.models.Ingredient;
-import core.services.IngredientService;
+import core.models.entities.Ingredient;
+import core.services.IngredientsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import javax.validation.Valid;
 
 @RestController
-public class IngredientController {
-    private IngredientService ingredientService;
+@RequiredArgsConstructor
+@RequestMapping("api/ingredients")
+public class IngredientsController {
+    private IngredientsService ingredientsService;
+
     @Autowired
-    public IngredientController(IngredientService ingredientService) {
-        this.ingredientService = ingredientService;
+    public IngredientsController(IngredientsService ingredientsService) {
+        this.ingredientsService = ingredientsService;
     }
-    @GetMapping("/ingredient/all")
-    public Iterable<Ingredient> getAllIngrdiants(){
-       return ingredientService.getAllIngredients();
+
+    @GetMapping
+    public Iterable<Ingredient> getAllIngrdiants() {
+        return ingredientsService.getAllIngredients();
     }
+
+    @GetMapping("/{id}")
+    public Ingredient getById(@PathVariable("id") Long id) {
+        return ingredientsService.findById(id);
+    }
+
+    @PostMapping
+    public Ingredient create(@Valid @RequestBody Ingredient ingredient) {
+        return ingredientsService.create(ingredient);
+    }
+
+    @PutMapping
+    public Ingredient update(@Valid @RequestBody Ingredient ingredient) {
+        return ingredientsService.update(ingredient);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable(value = "id") Long id) {
+        ingredientsService.delete(id);
+
+        return ResponseEntity.ok().build();
+    }
+
 }
